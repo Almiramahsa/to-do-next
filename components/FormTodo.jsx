@@ -1,11 +1,31 @@
 'use client';
 
 import Input from './Input';
+import { useRouter } from 'next/navigation';
 export default function FormTodo() {
-  function handleSubmit(e) {
+  const router = useRouter();
+  async function handleSubmit(e) {
     e.preventDefault();
-    const formData = new FormData();
+    const formData = new FormData(e.target);
+
+    const res = await fetch('/api/todos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        todo: formData.get('todo'),
+        date: formData.get('date'),
+        time: formData.get('time'),
+      }),
+    });
+    const data = await res.json();
+    console.log(data);
+    router.refresh();
+    e.target.reset();
+    router.push('/todonext');
   }
+
   return (
     <div className="grid grid-cols-1 place-items-center">
       <form onSubmit={handleSubmit} className="bg-gray-800 space-y-4 p-4 w-[80vw] md:w-[40vw]">
