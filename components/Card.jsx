@@ -10,7 +10,6 @@ export default function Card({ todoNext }) {
     const data = await res.json();
 
     console.log(data);
-
     router.refresh();
   }
   return todoNext.map((todo) => (
